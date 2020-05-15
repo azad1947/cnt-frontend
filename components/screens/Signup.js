@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {
   View,
   Text,
@@ -9,48 +9,78 @@ import {
 } from 'react-native';
 import {dev} from '../Images';
 import {Actions} from 'react-native-router-flux';
+import {Formik} from 'formik';
+import * as Yup from 'yup';
 
 export default function Login() {
-  const [phone, setPhone] = useState('');
-  const [password, setPassword] = useState('');
-  const [name, setName] = useState('');
+  const validateSchema = Yup.object({
+    name: Yup.string().required('required'),
+    phone: Yup.string()
+      .required('required')
+      .matches(/^[0-9]+$/, 'invalid phone number')
+      .min(10)
+      .max(12),
+    password: Yup.string().required('required').min(6),
+  });
   const back = () => {
     Actions.push('login');
   };
   return (
-    <View style={styles.container}>
-      <ImageBackground source={dev} style={styles.img} />
-      <View style={{flex: 1}}>
-        <TextInput
-          style={styles.card}
-          placeholder={'name'}
-          onChangeText={(nam) => setName(nam)}
-          keyboardtype={'phone-pad'}
-          value={name}
-        />
-        <TextInput
-          style={styles.card}
-          placeholder={'phone'}
-          onChangeText={(phn) => setPhone(phn)}
-          keyboardtype={'phone-pad'}
-          value={phone}
-        />
-        <TextInput
-          style={styles.card}
-          placeholder={'password'}
-          onChangeText={(pwd) => setPassword(pwd)}
-          value={password}
-          secureTextEntry={true}
-        />
-        <TouchableOpacity style={styles.card}>
-          <Text style={{textAlign: 'center', fontSize: 15}}>Submit</Text>
-        </TouchableOpacity>
-        <Text style={{height: 35, textAlign: 'center'}}>
-          already have an account? <Text style={styles.link} onPress={() => back()}> Sign In </Text>
-        </Text>
-      </View>
-      <Text style={styles.covid}>Covid-19: Stay Home, Stay Safe</Text>
-    </View>
+    <Formik
+      initialValues={{name: '', phone: '', password: ''}}
+      validationSchema={validateSchema}
+      onSubmit={(values) => {
+        console.log('values----->', values);
+      }}>
+      {({handleChange, handleSubmit, values, errors, touched}) => (
+        <View style={styles.container}>
+          <ImageBackground source={dev} style={styles.img} />
+          <View style={{flex: 1}}>
+            <TextInput
+              autoFocus={true}
+              placeholder={'name'}
+              onChangeText={handleChange('name')}
+              value={values.name}
+              style={styles.card}
+              returnKeyType={'next'}
+              onSubmitEditing={() => this.phoneInput.focus()}
+            />
+            <Text style={styles.error}>{errors.name}</Text>
+            <TextInput
+              onChangeText={handleChange('phone')}
+              value={values.phone}
+              placeholder={'phone'}
+              style={styles.card}
+              returnKeyType={'next'}
+              ref={(input) => (this.phoneInput = input)}
+              onSubmitEditing={() => this.passwordInput.focus()}
+            />
+            <Text style={styles.error}>{touched.phone && errors.phone}</Text>
+            <TextInput
+              onChangeText={handleChange('password')}
+              value={values.password}
+              placeholder={'password'}
+              secureTextEntry={true}
+              style={styles.card}
+              ref={(input) => (this.passwordInput = input)}
+            />
+            <Text style={styles.error}>
+              {touched.password && errors.password}
+            </Text>
+            <TouchableOpacity style={styles.card} onPress={handleSubmit}>
+              <Text style={{textAlign: 'center', fontSize: 15}}>Submit</Text>
+            </TouchableOpacity>
+            <Text style={{height: 35, textAlign: 'center'}}>
+              already have an account?{' '}
+              <Text style={styles.link} onPress={() => back()}>
+                Sign In
+              </Text>
+            </Text>
+          </View>
+          <Text style={styles.covid}>Covid-19: Stay Home, Stay Safe</Text>
+        </View>
+      )}
+    </Formik>
   );
 }
 
@@ -70,7 +100,6 @@ const styles = StyleSheet.create({
     height: 36,
     borderRadius: 100 / 2,
     backgroundColor: 'skyblue',
-    margin: 10,
     padding: 10,
   },
   link: {
@@ -82,5 +111,9 @@ const styles = StyleSheet.create({
     height: 30,
     textAlign: 'center',
     backgroundColor: 'pink',
+  },
+  error: {
+    color: '#6961ff',
+    paddingLeft: 10,
   },
 });

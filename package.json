@@ -11,12 +11,14 @@
   },
   "dependencies": {
     "@react-native-community/picker": "^1.4.0",
+    "formik": "^2.1.4",
     "react": "16.11.0",
     "react-native": "0.62.2",
     "react-native-gesture-handler": "^1.6.1",
     "react-native-reanimated": "^1.8.0",
     "react-native-router-flux": "^4.2.0",
-    "react-native-screens": "^2.7.0"
+    "react-native-screens": "^2.7.0",
+    "yup": "^0.28.5"
   },
   "devDependencies": {
     "@babel/core": "^7.9.6",
