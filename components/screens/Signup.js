@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -11,26 +11,45 @@ import {dev} from '../Images';
 import {Actions} from 'react-native-router-flux';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
+import {connect} from 'react-redux';
+import ActionCreator from '../../redux/ActionCreator';
+import {SIGN_UP} from '../../redux/actions';
+import axios from 'axios';
 
-export default function Login() {
+function Signup({dispatch}) {
+  const [isPhoneExist, setIsPhoneExist] = useState(false);
+  const focusNextInput = (node) => node.focus();
   const validateSchema = Yup.object({
     name: Yup.string().required('required'),
     phone: Yup.string()
       .required('required')
       .matches(/^[0-9]+$/, 'invalid phone number')
-      .min(10)
-      .max(12),
+      .length(10),
     password: Yup.string().required('required').min(6),
   });
   const back = () => {
     Actions.push('login');
   };
+
   return (
     <Formik
       initialValues={{name: '', phone: '', password: ''}}
       validationSchema={validateSchema}
       onSubmit={(values) => {
-        console.log('values----->', values);
+        dispatch(ActionCreator(SIGN_UP, values));
+        axios
+          .post('http://192.168.0.112:3000/signup', values)
+          .then((res) => res.status)
+          .then((code) => {
+            console.log('code--->', code);
+            let {name, phone} = values;
+            dispatch(ActionCreator(SIGN_UP, {name, phone}));
+            Actions.push('codeverification');
+          })
+          .catch((err) => {
+            console.log('err---->', err);
+            setIsPhoneExist(true);
+          });
       }}>
       {({handleChange, handleSubmit, values, errors, touched}) => (
         <View style={styles.container}>
@@ -47,6 +66,7 @@ export default function Login() {
             />
             <Text style={styles.error}>{errors.name}</Text>
             <TextInput
+              keyboardType={'phone-pad'}
               onChangeText={handleChange('phone')}
               value={values.phone}
               placeholder={'phone'}
@@ -55,7 +75,11 @@ export default function Login() {
               ref={(input) => (this.phoneInput = input)}
               onSubmitEditing={() => this.passwordInput.focus()}
             />
-            <Text style={styles.error}>{touched.phone && errors.phone}</Text>
+            {!isPhoneExist ? (
+              <Text style={styles.error}>{touched.phone && errors.phone}</Text>
+            ) : (
+              <Text style={styles.error}>{'phone already exists'}</Text>
+            )}
             <TextInput
               onChangeText={handleChange('password')}
               value={values.password}
@@ -110,6 +134,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 30,
     textAlign: 'center',
+    textAlignVertical: 'center',
     backgroundColor: 'pink',
   },
   error: {
@@ -117,3 +142,5 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
   },
 });
+
+export default connect()(Signup);

@@ -11,13 +11,17 @@
   },
   "dependencies": {
     "@react-native-community/picker": "^1.4.0",
+    "axios": "^0.19.2",
     "formik": "^2.1.4",
+    "lodash": "^4.17.15",
     "react": "16.11.0",
     "react-native": "0.62.2",
     "react-native-gesture-handler": "^1.6.1",
     "react-native-reanimated": "^1.8.0",
     "react-native-router-flux": "^4.2.0",
     "react-native-screens": "^2.7.0",
+    "react-redux": "^7.2.0",
+    "redux": "^4.0.5",
     "yup": "^0.28.5"
   },
   "devDependencies": {

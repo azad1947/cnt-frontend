@@ -109,7 +109,6 @@ export default function Home() {
 
 const styles = StyleSheet.create({
   container: {
-    // flex: 1,
     justifyContent: 'space-evenly',
     alignItems: 'center',
   },
@@ -128,8 +127,7 @@ const styles = StyleSheet.create({
   },
   txt: {
     color: 'white',
-    fontSize: 40,
-    textAlign: 'center',
+    fontSize: 30,
   },
   ring: {
     width: 40,
@@ -158,6 +156,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 40,
     textAlign: 'center',
+    textAlignVertical: 'center',
     padding: 7,
     backgroundColor: 'pink',
     bottom: -50,

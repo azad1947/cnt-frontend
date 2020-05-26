@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Text,
@@ -12,10 +12,20 @@ import * as Yup from 'yup';
 import {work} from '../Images';
 import {dev} from '../Images';
 import {Actions} from 'react-native-router-flux';
+import axios from 'axios';
+import {connect} from 'react-redux';
+import ActionCreator from '../../redux/ActionCreator';
+import {LOGIN} from '../../redux/actions';
+import Store from '../../redux/Store';
 
-export default function Login() {
+function Login({dispatch}) {
+  const [isPhoneCorrect, setIsPhoneCorrect] = useState('');
+  const [isPasswordCorrect, setIsPasswordCorrect] = useState('');
   const goToSignup = () => {
     Actions.push('signup');
+  };
+  const goBack = () => {
+    Actions.pop();
   };
   const validateSchema = Yup.object({
     phone: Yup.string()
@@ -29,7 +39,29 @@ export default function Login() {
     <Formik
       initialValues={{phone: '', password: ''}}
       validationSchema={validateSchema}
-      onSubmit={(values) => console.log('values---->', values)}>
+      onSubmit={(values) => {
+        axios
+          .post('http://192.168.0.112:3000/login', values)
+          .then((res) => {
+            if (res.data === 'no user with this phone') {
+              setIsPhoneCorrect('no user with this phone');
+              setIsPasswordCorrect('');
+            } else if (res.data === 'wrong password') {
+              setIsPasswordCorrect('wrong password');
+              setIsPhoneCorrect('');
+            } else {
+              dispatch(
+                ActionCreator(LOGIN, {
+                  phone: values.phone,
+                  token: res.data.auth_token,
+                  name: res.data.name,
+                }),
+              );
+              Actions.push('home');
+            }
+          })
+          .catch((err) => console.log('err--->', err));
+      }}>
       {({handleChange, handleSubmit, values, errors, touched}) => (
         <View style={styles.container}>
           <ImageBackground source={dev} style={styles.img} />
@@ -38,7 +70,7 @@ export default function Login() {
           </Text>
           <View style={{flex: 1}}>
             <TextInput
-              keyboardtype={'numeric'}
+              keyboardType={'phone-pad'}
               autoFocus={true}
               style={styles.card}
               placeholder={'phone'}
@@ -47,7 +79,11 @@ export default function Login() {
               returnKeyType={'next'}
               onSubmitEditing={() => this.passwordInput.focus()}
             />
-            <Text style={styles.error}>{touched.phone && errors.phone}</Text>
+            {!isPhoneCorrect ? (
+              <Text style={styles.error}>{touched.phone && errors.phone}</Text>
+            ) : (
+              <Text style={styles.error}>{isPhoneCorrect}</Text>
+            )}
             <TextInput
               style={styles.card}
               placeholder={'password'}
@@ -57,11 +93,18 @@ export default function Login() {
               ref={(input) => (this.passwordInput = input)}
             />
 
-            <Text style={styles.error}>
-              {touched.password && errors.password}
-            </Text>
+            {!isPasswordCorrect ? (
+              <Text style={styles.error}>
+                {touched.password && errors.password}
+              </Text>
+            ) : (
+              <Text style={styles.error}>{isPasswordCorrect}</Text>
+            )}
             <TouchableOpacity style={styles.card} onPress={handleSubmit}>
-              <Text style={{textAlign: 'center', fontSize: 13, fontWeight: 'bold'}}>login</Text>
+              <Text
+                style={{textAlign: 'center', fontSize: 13, fontWeight: 'bold'}}>
+                login
+              </Text>
             </TouchableOpacity>
             <Text style={{height: 35, textAlign: 'center'}}>
               Don't have an account?{' '}
@@ -104,6 +147,7 @@ const styles = StyleSheet.create({
   },
   covid: {
     height: 30,
+    textAlignVertical: 'center',
     textAlign: 'center',
     fontWeight: 'bold',
     color: '#6961ff',
@@ -113,7 +157,7 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
   },
   tagLine: {
-    width:'80%',
+    width: '80%',
     textAlign: 'center',
     padding: 10,
     fontSize: 15,
@@ -126,3 +170,5 @@ const styles = StyleSheet.create({
     fontStyle: 'italic',
   },
 });
+
+export default connect()(Login);
