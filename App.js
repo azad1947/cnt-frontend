@@ -13,7 +13,7 @@ const App: () => React$Node = () => {
     <Provider store={Store}>
       <Router>
         <Stack key={'root'} hideNavBar={true}>
-          <Scene key={'login'} component={Login} title={'login'} initial />
+          <Scene key={'login'} component={Login} title={'login'}  initial/>
           <Scene key={'signup'} component={Signup} title={'signup'} />
           <Scene
             key={'codeverification'}

@@ -51,6 +51,17 @@ function CodeVerification({user_data, dispatch}) {
       setError('required');
     }
   };
+  const sendCodeAgain = () => {
+    axios
+      .post('http://192.168.0.112:3000/resendcode', {
+        phone: user_data.phone,
+      })
+      .then((res) => res.data)
+      .then((data) => console.log('data---->', data))
+      .catch((err) => console.log('err--->', err));
+    setCode('');
+    setIsValidCode(null);
+  };
   return (
     <View style={styles.container}>
       <View style={{width: '100%', height: 300}}>
@@ -92,11 +103,12 @@ function CodeVerification({user_data, dispatch}) {
           onPress={handleSubmit}>
           <Text style={styles.button}>SUBMIT</Text>
         </TouchableOpacity>
-        <View style={{flexDirection: 'row', alignItems: 'center', marginTop:5}}>
+        <View
+          style={{flexDirection: 'row', alignItems: 'center', marginTop: 5}}>
           <Text style={{textAlign: 'center', fontSize: 12}}>
             din't get verification code??
           </Text>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={sendCodeAgain}>
             <Text style={styles.link}> Send Again</Text>
           </TouchableOpacity>
         </View>

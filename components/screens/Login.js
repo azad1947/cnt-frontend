@@ -111,7 +111,7 @@ function Login({dispatch}) {
             </TouchableOpacity>
             <TouchableOpacity>
               <Text style={{textAlign: 'center', color: 'blue', margin: 5}}>
-                forget password?
+                forgot password?
               </Text>
             </TouchableOpacity>
           </View>
