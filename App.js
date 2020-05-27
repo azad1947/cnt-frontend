@@ -19,7 +19,6 @@ const App: () => React$Node = () => {
             key={'codeverification'}
             component={CodeVerification}
             title={'codeverification'}
-            onBack={()=> Actions.push('home')}
           />
           <Scene key={'home'} component={Home} title={'home'} />
           <Scene key={'address'} component={Address} title={'address'} />

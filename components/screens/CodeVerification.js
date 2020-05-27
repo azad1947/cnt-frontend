@@ -16,8 +16,8 @@ import {LOGIN} from '../../redux/actions';
 
 function CodeVerification({user_data, dispatch}) {
   const [code, setCode] = useState('');
-  const [isValidCode, setIsValidCode] = useState(false);
-  const [error, setError] = useState(false);
+  const [isValidCode, setIsValidCode] = useState(null);
+  const [error, setError] = useState(null);
   const handleSubmit = () => {
     if (code) {
       axios
@@ -70,7 +70,7 @@ function CodeVerification({user_data, dispatch}) {
           width: '100%',
           flex: 1,
           alignItems: 'center',
-          justifyContent: 'center',
+          // justifyContent: 'center',
         }}>
         <View>
           <TextInput
@@ -92,10 +92,14 @@ function CodeVerification({user_data, dispatch}) {
           onPress={handleSubmit}>
           <Text style={styles.button}>SUBMIT</Text>
         </TouchableOpacity>
-        <Text style={{textAlign: 'center', fontSize: 12}}>
-          din't get verification code??
-          <Text style={styles.link}> Send Again</Text>
-        </Text>
+        <View style={{flexDirection: 'row', alignItems: 'center', marginTop:5}}>
+          <Text style={{textAlign: 'center', fontSize: 12}}>
+            din't get verification code??
+          </Text>
+          <TouchableOpacity>
+            <Text style={styles.link}> Send Again</Text>
+          </TouchableOpacity>
+        </View>
       </View>
 
       <View style={{width: '100%', backgroundColor: 'pink'}}>
@@ -109,7 +113,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'space-between',
+    // justifyContent: 'space-between',
   },
   img: {
     width: '100%',
@@ -129,7 +133,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#a19cf8',
     padding: 10,
     fontWeight: 'bold',
-    margin: 10,
+    // margin: 10,
   },
   link: {
     fontSize: 15,

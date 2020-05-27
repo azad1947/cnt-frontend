@@ -16,7 +16,6 @@ import axios from 'axios';
 import {connect} from 'react-redux';
 import ActionCreator from '../../redux/ActionCreator';
 import {LOGIN} from '../../redux/actions';
-import Store from '../../redux/Store';
 
 function Login({dispatch}) {
   const [isPhoneCorrect, setIsPhoneCorrect] = useState('');
@@ -102,18 +101,27 @@ function Login({dispatch}) {
             )}
             <TouchableOpacity style={styles.card} onPress={handleSubmit}>
               <Text
-                style={{textAlign: 'center', fontSize: 13, fontWeight: 'bold'}}>
+                style={{
+                  textAlign: 'center',
+                  fontSize: 13,
+                  fontWeight: 'bold',
+                }}>
                 login
               </Text>
             </TouchableOpacity>
-            <Text style={{height: 35, textAlign: 'center'}}>
-              Don't have an account?{' '}
-              <Text style={styles.link} onPress={() => goToSignup()}>
-                Sign UP
+            <TouchableOpacity>
+              <Text style={{textAlign: 'center', color: 'blue', margin: 5}}>
+                forget password?
               </Text>
-            </Text>
+            </TouchableOpacity>
           </View>
-          <View style={{width: '100%', backgroundColor: 'pink'}}>
+          <View style={{width: '100%'}}>
+            <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginBottom: 10}}>
+              <Text>Don't have an account yet?</Text>
+              <TouchableOpacity onPress={() => goToSignup()}>
+                <Text style={styles.link}>Sign Up</Text>
+              </TouchableOpacity>
+            </View>
             <Text style={styles.covid}>Covid-19: Stay Home, Stay Safe</Text>
           </View>
         </View>
@@ -144,12 +152,14 @@ const styles = StyleSheet.create({
   link: {
     fontSize: 15,
     color: 'blue',
+    marginLeft: 5,
   },
   covid: {
     height: 30,
     textAlignVertical: 'center',
     textAlign: 'center',
     fontWeight: 'bold',
+    backgroundColor: 'pink',
     color: '#6961ff',
   },
   error: {

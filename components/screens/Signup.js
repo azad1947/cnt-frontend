@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Text,
@@ -18,7 +18,6 @@ import axios from 'axios';
 
 function Signup({dispatch}) {
   const [isPhoneExist, setIsPhoneExist] = useState(false);
-  const focusNextInput = (node) => node.focus();
   const validateSchema = Yup.object({
     name: Yup.string().required('required'),
     phone: Yup.string()
@@ -94,14 +93,16 @@ function Signup({dispatch}) {
             <TouchableOpacity style={styles.card} onPress={handleSubmit}>
               <Text style={{textAlign: 'center', fontSize: 15}}>Submit</Text>
             </TouchableOpacity>
-            <Text style={{height: 35, textAlign: 'center'}}>
-              already have an account?{' '}
-              <Text style={styles.link} onPress={() => back()}>
-                Sign In
-              </Text>
-            </Text>
           </View>
-          <Text style={styles.covid}>Covid-19: Stay Home, Stay Safe</Text>
+          <View style={{width: '100%'}}>
+            <View style={{flexDirection: 'row', alignItems: 'center',justifyContent: 'center',marginBottom:10}}>
+              <Text style={{textAlign: 'center'}}>already have an account?</Text>
+              <TouchableOpacity onPress={() => back()}>
+                <Text style={styles.link}>Sign In</Text>
+              </TouchableOpacity>
+            </View>
+            <Text style={styles.covid}>Covid-19: Stay Home, Stay Safe</Text>
+          </View>
         </View>
       )}
     </Formik>
@@ -129,6 +130,7 @@ const styles = StyleSheet.create({
   link: {
     fontSize: 15,
     color: 'blue',
+    marginLeft: 5,
   },
   covid: {
     width: '100%',
