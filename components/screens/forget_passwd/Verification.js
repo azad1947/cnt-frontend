@@ -3,14 +3,15 @@ import axios from 'axios';
 import {connect} from 'react-redux';
 import CodeVerification from '../CodeVerification';
 import {Actions} from 'react-native-router-flux';
+import ActionCreator from '../../../redux/ActionCreator';
+import {FORGET_PASSWD} from '../../../redux/actions';
 
-function Verification_on_forget_password({user_data}) {
+function Verification_on_forget_password({user_data, dispatch}) {
   const [code, setCode] = useState('');
   const [isValidCode, setIsValidCode] = useState(null);
   const [error, setError] = useState(null);
   const handleSubmit = () => {
     if (code) {
-      console.log('code------->', code);
       axios
         .post('http://192.168.0.112:3000/verify', {
           phone: user_data.phone,
@@ -18,7 +19,10 @@ function Verification_on_forget_password({user_data}) {
         })
         .then(async (res) => {
           console.log('res---->', res.data);
-          if(res.data.auth_token){
+          if (res.data.auth_token) {
+            dispatch(
+              ActionCreator(FORGET_PASSWD, {token: res.data.auth_token,phone:user_data.phone}),
+            );
             Actions.push('updatePasswd');
           }
         })

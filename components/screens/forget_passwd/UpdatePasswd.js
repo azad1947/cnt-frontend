@@ -13,8 +13,10 @@ import {Formik} from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
 import {Actions} from 'react-native-router-flux';
+import ActionCreator from '../../../redux/ActionCreator';
+import {FORGET_PASSWD} from '../../../redux/actions';
 
-function UpdatePasswd({user_data}) {
+function UpdatePasswd({user_data, dispatch}) {
   const matchPassword = 'password not matched';
   const validateSchema = Yup.object({
     password: Yup.string().required('required').min(6),
@@ -25,17 +27,28 @@ function UpdatePasswd({user_data}) {
       initialValues={{password: '', confirmPassword: ''}}
       validationSchema={validateSchema}
       onSubmit={(values) => {
-        console.log('values---->', values);
         if (values.password === values.confirmPassword) {
           console.log('matched');
           console.log('user_data--->', user_data);
-          axios
-            .post('http://192.168.0.112:3000/updatepassword', {
+          axios({
+            url: 'http://192.168.0.112:3000/updatepassword',
+            data: {
               phone: user_data.phone,
               password: values.password,
-            })
+            },
+            method: 'post',
+            headers: {
+              auth_token: user_data.token,
+            },
+          })
             .then((res) => {
-              console.log('data----->', res.data);
+              dispatch(
+                ActionCreator(FORGET_PASSWD, {
+                  name: res.data.name,
+                  phone: res.data.phone,
+                  token: res.data.auth_token,
+                }),
+              );
               Actions.push('home');
             })
             .catch((err) => console.log('err----->', err));

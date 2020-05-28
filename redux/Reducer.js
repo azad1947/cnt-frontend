@@ -3,7 +3,7 @@ export default function Reducer(state = {}, action) {
   switch (action.type) {
     case 'SIGN_UP':
       return {
-        state,
+        ...state,
         sign_up: {
           name: _.get(action, 'name', ''),
           phone: _.get(action, 'phone', ''),
@@ -12,7 +12,7 @@ export default function Reducer(state = {}, action) {
       };
     case 'LOGIN':
       return {
-        state,
+        ...state,
         login: {
           name: _.get(action, 'name', ''),
           phone: _.get(action, 'phone', ''),
@@ -22,7 +22,7 @@ export default function Reducer(state = {}, action) {
       };
     case 'PLACE_ORDER':
       return {
-        state,
+        ...state,
         place_order: {
           name: _.get(action, 'name', ''),
           phone: _.get(action, 'phone', ''),
@@ -31,10 +31,12 @@ export default function Reducer(state = {}, action) {
       };
     case 'FORGET_PASSWD':
       return {
+        ...state,
         forget_passwd: {
           name: _.get(action, 'name', ''),
           phone: _.get(action, 'phone', ''),
           type: _.get(action, 'type', ''),
+          token: _.get(action, 'token', ''),
         },
       };
     default:
