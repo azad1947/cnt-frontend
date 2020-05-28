@@ -7,19 +7,20 @@ import {
   TouchableOpacity,
   ImageBackground,
 } from 'react-native';
-import {dev} from '../Images';
+import {dev} from '../../Images';
 import {Actions} from 'react-native-router-flux';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 import {connect} from 'react-redux';
-import ActionCreator from '../../redux/ActionCreator';
-import {SIGN_UP} from '../../redux/actions';
+import ActionCreator from '../../../redux/ActionCreator';
+import {SIGN_UP} from '../../../redux/actions';
 import axios from 'axios';
 
 function Signup({dispatch}) {
   const [isPhoneExist, setIsPhoneExist] = useState(false);
   const validateSchema = Yup.object({
-    name: Yup.string().required('required'),
+    name: Yup.string()
+      .required('required'),
     phone: Yup.string()
       .required('required')
       .matches(/^[0-9]+$/, 'invalid phone number')
@@ -43,7 +44,7 @@ function Signup({dispatch}) {
             console.log('code--->', code);
             let {name, phone} = values;
             dispatch(ActionCreator(SIGN_UP, {name, phone}));
-            Actions.push('codeverification');
+            Actions.push('sign_up_verification');
           })
           .catch((err) => {
             console.log('err---->', err);
@@ -95,8 +96,16 @@ function Signup({dispatch}) {
             </TouchableOpacity>
           </View>
           <View style={{width: '100%'}}>
-            <View style={{flexDirection: 'row', alignItems: 'center',justifyContent: 'center',marginBottom:10}}>
-              <Text style={{textAlign: 'center'}}>already have an account?</Text>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginBottom: 10,
+              }}>
+              <Text style={{textAlign: 'center'}}>
+                already have an account?
+              </Text>
               <TouchableOpacity onPress={() => back()}>
                 <Text style={styles.link}>Sign In</Text>
               </TouchableOpacity>

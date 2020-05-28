@@ -29,6 +29,14 @@ export default function Reducer(state = {}, action) {
           type: _.get(action, 'type', ''),
         },
       };
+    case 'FORGET_PASSWD':
+      return {
+        forget_passwd: {
+          name: _.get(action, 'name', ''),
+          phone: _.get(action, 'phone', ''),
+          type: _.get(action, 'type', ''),
+        },
+      };
     default:
       return state;
   }

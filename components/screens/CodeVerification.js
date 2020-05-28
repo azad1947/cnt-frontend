@@ -8,60 +8,8 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {authentication, twoFactor} from '../Images';
-import axios from 'axios';
-import {connect} from 'react-redux';
-import {Actions} from 'react-native-router-flux';
-import ActionCreator from '../../redux/ActionCreator';
-import {LOGIN} from '../../redux/actions';
 
-function CodeVerification({user_data, dispatch}) {
-  const [code, setCode] = useState('');
-  const [isValidCode, setIsValidCode] = useState(null);
-  const [error, setError] = useState(null);
-  const handleSubmit = () => {
-    if (code) {
-      axios
-        .post('http://192.168.0.112:3000/verify', {
-          phone: user_data.phone,
-          name: user_data.name,
-          code: code,
-        })
-        .then((res) => {
-          console.log('statusCode--->', res.status);
-          console.log('res--->', res.data);
-          if (res.data.code === 20404) {
-            setIsValidCode('invalid code');
-          } else {
-            let token = res.data.auth_token;
-            dispatch(
-              ActionCreator(LOGIN, {
-                name: user_data.name,
-                phone: user_data.phone,
-                token: token,
-              }),
-            );
-            Actions.push('home');
-          }
-        })
-        .catch((err) => {
-          console.log('err---->', err);
-          setIsValidCode('invalid code');
-        });
-    } else {
-      setError('required');
-    }
-  };
-  const sendCodeAgain = () => {
-    axios
-      .post('http://192.168.0.112:3000/resendcode', {
-        phone: user_data.phone,
-      })
-      .then((res) => res.data)
-      .then((data) => console.log('data---->', data))
-      .catch((err) => console.log('err--->', err));
-    setCode('');
-    setIsValidCode(null);
-  };
+export default function CodeVerification(props) {
   return (
     <View style={styles.container}>
       <View style={{width: '100%', height: 300}}>
@@ -89,18 +37,18 @@ function CodeVerification({user_data, dispatch}) {
             keyboardType={'phone-pad'}
             style={[styles.card, {color: '#fff'}]}
             placeholder={'verification code'}
-            value={code}
-            onChangeText={(num) => setCode(num)}
+            value={props.code}
+            onChangeText={(num) => props.setCode(num)}
           />
-          {!isValidCode ? (
-            <Text style={styles.error}>{error}</Text>
+          {!props.isValidCode ? (
+            <Text style={styles.error}>{props.error}</Text>
           ) : (
-            <Text style={styles.error}>{isValidCode}</Text>
+            <Text style={styles.error}>{props.isValidCode}</Text>
           )}
         </View>
         <TouchableOpacity
           style={[styles.card, {backgroundColor: '#a19cf8'}]}
-          onPress={handleSubmit}>
+          onPress={props.handleSubmit}>
           <Text style={styles.button}>SUBMIT</Text>
         </TouchableOpacity>
         <View
@@ -108,7 +56,7 @@ function CodeVerification({user_data, dispatch}) {
           <Text style={{textAlign: 'center', fontSize: 12}}>
             din't get verification code??
           </Text>
-          <TouchableOpacity onPress={sendCodeAgain}>
+          <TouchableOpacity onPress={props.sendCodeAgain}>
             <Text style={styles.link}> Send Again</Text>
           </TouchableOpacity>
         </View>
@@ -178,9 +126,3 @@ const styles = StyleSheet.create({
     paddingLeft: 18,
   },
 });
-
-const mapStateToProps = (state) => {
-  return {user_data: state.sign_up};
-};
-
-export default connect(mapStateToProps)(CodeVerification);

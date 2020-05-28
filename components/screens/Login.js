@@ -30,8 +30,7 @@ function Login({dispatch}) {
     phone: Yup.string()
       .required('required')
       .matches(/^[0-9]+$/, 'invalid phone number')
-      .min(10)
-      .max(12),
+      .length(10),
     password: Yup.string().required('required'),
   });
   return (
@@ -109,14 +108,20 @@ function Login({dispatch}) {
                 login
               </Text>
             </TouchableOpacity>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={()=>Actions.push('forgetPassword')}>
               <Text style={{textAlign: 'center', color: 'blue', margin: 5}}>
                 forgot password?
               </Text>
             </TouchableOpacity>
           </View>
           <View style={{width: '100%'}}>
-            <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginBottom: 10}}>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginBottom: 10,
+              }}>
               <Text>Don't have an account yet?</Text>
               <TouchableOpacity onPress={() => goToSignup()}>
                 <Text style={styles.link}>Sign Up</Text>
