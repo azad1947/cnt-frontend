@@ -61,4 +61,14 @@ export const styles = StyleSheet.create({
     padding: wp('2%') > hp('2%') ? wp('2%') : hp('2%'),
     alignSelf: 'center',
   },
+  submit: {
+    textAlign: 'center',
+    fontWeight: 'bold',
+    color: 'white',
+    fontSize: wp('3%') > hp('3%') ? wp('3%') : hp('3%'),
+  },
+  covidView: {
+    width: '100%',
+    marginTop: hp('5%')>wp('5%')?hp('5%'):wp('5%'),
+  },
 });

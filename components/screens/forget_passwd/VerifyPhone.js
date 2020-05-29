@@ -72,6 +72,7 @@ function VerifyPhone({dispatch}) {
                 keyboardType={'phone-pad'}
                 style={styles.card}
                 placeholder={'phone'}
+                placeholderTextColor={'#6961ff'}
                 onChangeText={handleChange('phone')}
                 values={values.phone}
               />
@@ -88,7 +89,7 @@ function VerifyPhone({dispatch}) {
                 <Text style={style.submit}>Submit</Text>
               </TouchableOpacity>
             </View>
-            <View style={style.covidView}>
+            <View style={styles.covidView}>
               <Text style={styles.covid}>Covid-19: Stay Home, Stay Safe</Text>
             </View>
           </View>,
@@ -180,9 +181,6 @@ const style = StyleSheet.create({
     color: 'white',
     textAlign: 'center',
     fontWeight: 'bold',
-  },
-  covidView: {
-    width: '100%',
   },
 });
 

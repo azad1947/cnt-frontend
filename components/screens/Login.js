@@ -123,12 +123,7 @@ function Login({dispatch}) {
                 style={[styles.card, styles.button]}
                 onPress={handleSubmit}>
                 <Text
-                  style={{
-                    textAlign: 'center',
-                    fontWeight: 'bold',
-                    color: 'white',
-                    fontSize: wp('3%') > hp('3%') ? wp('3%') : hp('3%'),
-                  }}>
+                  style={styles.submit}>
                   Login
                 </Text>
               </TouchableOpacity>
@@ -144,7 +139,7 @@ function Login({dispatch}) {
                 </Text>
               </TouchableOpacity>
             </View>
-            <View style={{width: '100%', marginTop: wp('4%')}}>
+            <View style={styles.covidView}>
               <View
                 style={{
                   flexDirection: 'row',
