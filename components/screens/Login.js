@@ -127,7 +127,7 @@ function Login({dispatch}) {
                     textAlign: 'center',
                     fontWeight: 'bold',
                     color: 'white',
-                    fontSize: wp('3.5%'),
+                    fontSize: wp('3%') > hp('3%') ? wp('3%') : hp('3%'),
                   }}>
                   Login
                 </Text>
@@ -137,8 +137,8 @@ function Login({dispatch}) {
                   style={{
                     textAlign: 'center',
                     color: 'blue',
-                    margin: wp('4%')>hp('4%')?wp('4%'):hp('4%'),
-                    fontSize: wp('3%')>hp('3%')?wp('3%'):hp('3%'),
+                    margin: wp('4%') > hp('4%') ? wp('4%') : hp('4%'),
+                    fontSize: wp('3%') > hp('3%') ? wp('3%') : hp('3%'),
                   }}>
                   forgot password?
                 </Text>

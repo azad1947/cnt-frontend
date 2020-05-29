@@ -29,7 +29,6 @@ function VerifyPhone({dispatch}) {
   const [isPhoneCorrect, setIsPhoneCorrect] = useState(null);
   const screenHeight = Math.round(Dimensions.get('window').height);
   const screenWidth = Math.round(Dimensions.get('window').width);
-  console.log('store-->', Store.getState());
   const validateSchema = Yup.object({
     phone: Yup.string()
       .required('required')
