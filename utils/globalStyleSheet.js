@@ -22,9 +22,9 @@ export const styles = StyleSheet.create({
     color: '#6961ff',
     borderColor: 'magenta',
     borderWidth: 1,
-    padding: hp('1%'),
-    marginTop: hp('2%'),
-    paddingLeft: wp('2%'),
+    padding: wp('1%') > hp('1%') ? wp('1%') : hp('1%'),
+    marginTop: wp('2%') > hp('2%') ? wp('2%') : hp('2%'),
+    paddingLeft: wp('2%') > hp('2%') ? wp('2%') : hp('2%'),
   },
   link: {
     fontSize: wp('3%') > hp('3%') ? wp('3%') : hp('3%'),
