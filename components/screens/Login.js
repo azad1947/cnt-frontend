@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {
   ScrollView,
   View,
@@ -16,6 +16,7 @@ import axios from 'axios';
 import {connect} from 'react-redux';
 import ActionCreator from '../../redux/ActionCreator';
 import {LOGIN} from '../../redux/actions';
+import {focusIt} from '../../utils/cntUtis';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -26,6 +27,7 @@ import {
 function Login({dispatch}) {
   const [isPhoneCorrect, setIsPhoneCorrect] = useState('');
   const [isPasswordCorrect, setIsPasswordCorrect] = useState('');
+  const passwordRef = useRef(null);
 
   useEffect(() => {
     lor();
@@ -90,6 +92,7 @@ function Login({dispatch}) {
                 value={values.phone}
                 returnKeyType={'next'}
                 placeholderTextColor={'#6961ff'}
+                onSubmitEditing={() => focusIt(passwordRef)}
               />
               {!isPhoneCorrect ? (
                 <Text style={styles.error}>
@@ -99,6 +102,7 @@ function Login({dispatch}) {
                 <Text style={styles.error}>{isPhoneCorrect}</Text>
               )}
               <TextInput
+                ref={passwordRef}
                 style={styles.card}
                 placeholder={'password'}
                 onChangeText={handleChange('password')}
@@ -194,7 +198,7 @@ const styles = StyleSheet.create({
     marginLeft: 5,
   },
   covid: {
-    height: wp('8%'),
+    height: wp('8%') > hp('8%') ? wp('8%') : hp('8%'),
     textAlignVertical: 'center',
     textAlign: 'center',
     fontWeight: 'bold',
