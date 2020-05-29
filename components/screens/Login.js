@@ -3,7 +3,6 @@ import {
   ScrollView,
   View,
   Text,
-  StyleSheet,
   TextInput,
   TouchableOpacity,
   Image,
@@ -138,8 +137,8 @@ function Login({dispatch}) {
                   style={{
                     textAlign: 'center',
                     color: 'blue',
-                    margin: wp('4%'),
-                    fontSize: wp('3.5%'),
+                    margin: wp('4%')>hp('4%')?wp('4%'):hp('4%'),
+                    fontSize: wp('3%')>hp('3%')?wp('3%'):hp('3%'),
                   }}>
                   forgot password?
                 </Text>

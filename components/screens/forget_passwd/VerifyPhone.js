@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Image,
@@ -6,6 +6,8 @@ import {
   TouchableOpacity,
   StyleSheet,
   TextInput,
+  ScrollView,
+  Dimensions,
 } from 'react-native';
 import {forgetPassword} from '../../Images';
 import {Formik} from 'formik';
@@ -16,8 +18,17 @@ import {FORGET_PASSWD} from '../../../redux/actions';
 import {connect} from 'react-redux';
 import {Actions} from 'react-native-router-flux';
 import Store from '../../../redux/Store';
+import {styles} from '../../../utils/globalStyleSheet';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+  listenOrientationChange as lor,
+  removeOrientationListener as rol,
+} from 'react-native-responsive-screen';
 function VerifyPhone({dispatch}) {
   const [isPhoneCorrect, setIsPhoneCorrect] = useState(null);
+  const screenHeight = Math.round(Dimensions.get('window').height);
+  const screenWidth = Math.round(Dimensions.get('window').width);
   console.log('store-->', Store.getState());
   const validateSchema = Yup.object({
     phone: Yup.string()
@@ -25,6 +36,10 @@ function VerifyPhone({dispatch}) {
       .matches(/^[0-9]+$/, 'invalid phone number')
       .length(10),
   });
+  useEffect((props) => {
+    lor(props);
+    return rol();
+  }, []);
   return (
     <Formik
       initialValues={{phone: ''}}
@@ -43,39 +58,55 @@ function VerifyPhone({dispatch}) {
           })
           .catch((err) => console.log('err---->', err));
       }}>
-      {({handleChange, handleSubmit, errors, values, touched}) => (
-        <View style={styles.container}>
-          <View style={styles.imgView}>
-            <Image source={forgetPassword} style={styles.img} />
-            <Text style={styles.tagLine}>
-              hey, it happens. Don't worry, we are here to help you.
-            </Text>
-          </View>
-          <View style={styles.inputView}>
-            <TextInput
-              autoFocus={true}
-              keyboardType={'phone-pad'}
-              style={styles.card}
-              placeholder={'phone'}
-              onChangeText={handleChange('phone')}
-              values={values.phone}
-            />
-            {!isPhoneCorrect ? (
-              <Text style={styles.error}>{touched.phone && errors.phone}</Text>
-            ) : (
-              <Text style={styles.error}>{isPhoneCorrect}</Text>
-            )}
-            <TouchableOpacity style={styles.card} onPress={handleSubmit}>
-              <Text style={styles.submit}>Submit</Text>
-            </TouchableOpacity>
-          </View>
-          <Text style={styles.covid}>Covid-19: Stay Home, Stay Safe</Text>
-        </View>
-      )}
+      {({handleChange, handleSubmit, errors, values, touched}) => {
+        const view = [
+          <View style={[styles.container]}>
+            <View style={{alignItems: 'center'}}>
+              <Image source={forgetPassword} style={styles.img} />
+              <Text style={styles.tagLine}>
+                hey, it happens. Don't worry, we are here to help you.
+              </Text>
+            </View>
+            <View style={style.inputView}>
+              <TextInput
+                autoFocus={true}
+                keyboardType={'phone-pad'}
+                style={styles.card}
+                placeholder={'phone'}
+                onChangeText={handleChange('phone')}
+                values={values.phone}
+              />
+              {!isPhoneCorrect ? (
+                <Text style={styles.error}>
+                  {touched.phone && errors.phone}
+                </Text>
+              ) : (
+                <Text style={styles.error}>{isPhoneCorrect}</Text>
+              )}
+              <TouchableOpacity
+                style={[styles.card, styles.button]}
+                onPress={handleSubmit}>
+                <Text style={style.submit}>Submit</Text>
+              </TouchableOpacity>
+            </View>
+            <View style={style.covidView}>
+              <Text style={styles.covid}>Covid-19: Stay Home, Stay Safe</Text>
+            </View>
+          </View>,
+        ];
+
+        return view.map((x) =>
+          screenHeight > screenWidth ? (
+            x
+          ) : (
+            <ScrollView key={'a'}>{x}</ScrollView>
+          ),
+        );
+      }}
     </Formik>
   );
 }
-
+/*
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -137,6 +168,22 @@ const styles = StyleSheet.create({
   error: {
     color: '#6961ff',
     paddingLeft: 10,
+  },
+});
+*/
+
+const style = StyleSheet.create({
+  inputView: {
+    marginTop: wp('2%') > hp('2%') ? wp('2%') : hp('2%'),
+    marginBottom: wp('2%') > hp('2%') ? wp('2%') : hp('2%'),
+  },
+  submit: {
+    color: 'white',
+    textAlign: 'center',
+    fontWeight: 'bold',
+  },
+  covidView: {
+    width: '100%',
   },
 });
 
