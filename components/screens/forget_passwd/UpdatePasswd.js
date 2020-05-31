@@ -1,4 +1,4 @@
-import React,{useEffect} from 'react';
+import React, {useRef} from 'react';
 import {
   ScrollView,
   View,
@@ -16,9 +16,12 @@ import axios from 'axios';
 import {Actions} from 'react-native-router-flux';
 import ActionCreator from '../../../redux/ActionCreator';
 import {FORGET_PASSWD} from '../../../redux/actions';
+import {styles} from '../../../utils/globalStyleSheet';
+import {focusIt, localhost} from '../../../utils/cntUtis';
 
 function UpdatePasswd({user_data, dispatch}) {
   const matchPassword = 'password not matched';
+  const confirmPasswordRef = useRef(null);
   const validateSchema = Yup.object({
     password: Yup.string().required('required').min(6),
     confirmPassword: Yup.string().required('required'),
@@ -57,7 +60,7 @@ function UpdatePasswd({user_data, dispatch}) {
       }}>
       {({handleChange, handleSubmit, values, errors, touched}) => (
         <View style={styles.container}>
-          <View style={styles.imgView}>
+          <View style={{alignItems: 'center'}}>
             <Image source={updatePasswd} style={styles.img} />
             <Text style={styles.tagLine}>
               You can update your password here. enjoy.
@@ -71,6 +74,7 @@ function UpdatePasswd({user_data, dispatch}) {
               onChangeText={handleChange('password')}
               value={values.password}
               secureTextEntry={true}
+              onSubmitEditing={() => focusIt(confirmPasswordRef)}
             />
             <Text style={styles.error}>
               {touched.password && errors.password}
@@ -81,6 +85,7 @@ function UpdatePasswd({user_data, dispatch}) {
               placeholderTextColor={'#6961ff'}
               onChangeText={handleChange('confirmPassword')}
               value={values.confirmPassword}
+              ref={confirmPasswordRef}
               secureTextEntry={true}
             />
             {values.password !== values.confirmPassword ? (
@@ -90,90 +95,18 @@ function UpdatePasswd({user_data, dispatch}) {
                 {touched.confirmPassword && errors.confirmPassword}
               </Text>
             )}
-            <TouchableOpacity style={styles.touch} onPress={handleSubmit}>
+            <TouchableOpacity style={[styles.card, styles.button]} onPress={handleSubmit}>
               <Text style={styles.submit}>Submit</Text>
             </TouchableOpacity>
           </View>
-          <Text style={styles.covid}>Covid-19: Stay Home, Stay Safe</Text>
+          <View style={styles.covidView}>
+            <Text style={styles.covid}>Covid-19: Stay Home, Stay Safe</Text>
+          </View>
         </View>
       )}
     </Formik>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  img: {
-    width: '100%',
-    height: '100%',
-    resizeMode: 'contain',
-  },
-
-  card: {
-    width: 250,
-    height: 36,
-    borderRadius: 100 / 2,
-    borderWidth: 1,
-    borderColor: '#6961ff',
-    color: '#6961ff',
-    padding: 10,
-    fontWeight: 'bold',
-    margin: 5,
-  },
-  imgView: {
-    flex: 1,
-    width: '100%',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  covid: {
-    width: '100%',
-    height: 30,
-    textAlignVertical: 'center',
-    textAlign: 'center',
-    fontWeight: 'bold',
-    backgroundColor: 'pink',
-    color: '#6961ff',
-  },
-  submit: {
-    textAlign: 'center',
-    textAlignVertical: 'center',
-    fontWeight: 'bold',
-    color: 'white',
-    fontSize: 20,
-  },
-  inputView: {
-    flex: 1,
-    marginTop: 50,
-  },
-  tagLine: {
-    width: '80%',
-    textAlign: 'center',
-    padding: 10,
-    fontSize: 15,
-    color: '#6961ff',
-    marginBottom: 10,
-    fontFamily: 'Merriweather-BlackItalic',
-    fontWeight: 'bold',
-    fontStyle: 'italic',
-  },
-  touch: {
-    backgroundColor: '#6961ff',
-    width: 170,
-    padding: 5,
-    margin: 50,
-    borderRadius: 100 / 2,
-  },
-  error: {
-    color: 'magenta',
-    paddingLeft: 16,
-    textAlign: 'left',
-  },
-});
 
 const mapStateToProps = (state) => {
   return {user_data: state.forget_passwd};
