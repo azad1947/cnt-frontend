@@ -15,7 +15,7 @@ import axios from 'axios';
 import {connect} from 'react-redux';
 import ActionCreator from '../../redux/ActionCreator';
 import {LOGIN} from '../../redux/actions';
-import {focusIt} from '../../utils/cntUtis';
+import {focusIt, localhost} from '../../utils/cntUtis';
 import {styles} from '../../utils/globalStyleSheet';
 import {
   widthPercentageToDP as wp,
@@ -28,7 +28,6 @@ function Login({dispatch}) {
   const [isPhoneCorrect, setIsPhoneCorrect] = useState('');
   const [isPasswordCorrect, setIsPasswordCorrect] = useState('');
   const passwordRef = useRef(null);
-  const loginRef = useRef(null);
 
   useEffect(() => {
     lor();
@@ -53,7 +52,7 @@ function Login({dispatch}) {
       validationSchema={validateSchema}
       onSubmit={(values) => {
         axios
-          .post('http://192.168.0.112:3000/login', values)
+          .post(`${localhost}/login`, values)
           .then((res) => {
             if (res.data === 'no user with this phone') {
               setIsPhoneCorrect('no user with this phone');
@@ -75,92 +74,85 @@ function Login({dispatch}) {
           .catch((err) => console.log('err--->', err));
       }}>
       {({handleChange, handleSubmit, values, errors, touched}) => (
-        <ScrollView>
-          <View style={styles.container}>
-            <View style={{alignItems: 'center'}}>
-              <Image source={dev} style={styles.img} />
-              <Text style={styles.tagLine}>
-                "working from home?? order chai and sutta online..."
-              </Text>
-            </View>
-            <View>
-              <TextInput
-                keyboardType={'phone-pad'}
-                autoFocus={true}
-                style={styles.card}
-                placeholder={'phone'}
-                onChangeText={handleChange('phone')}
-                value={values.phone}
-                returnKeyType={'next'}
-                placeholderTextColor={'#6961ff'}
-                onSubmitEditing={() => focusIt(passwordRef)}
-              />
-              {!isPhoneCorrect ? (
-                <Text style={styles.error}>
-                  {touched.phone && errors.phone}
-                </Text>
-              ) : (
-                <Text style={styles.error}>{isPhoneCorrect}</Text>
-              )}
-              <TextInput
-                ref={passwordRef}
-                style={styles.card}
-                placeholder={'password'}
-                onChangeText={handleChange('password')}
-                value={values.password}
-                secureTextEntry={true}
-                placeholderTextColor={'#6961ff'}
-              />
-
-              {!isPasswordCorrect ? (
-                <Text style={styles.error}>
-                  {touched.password && errors.password}
-                </Text>
-              ) : (
-                <Text style={styles.error}>{isPasswordCorrect}</Text>
-              )}
-              <TouchableOpacity
-                style={[styles.card, styles.button]}
-                onPress={handleSubmit}>
-                <Text
-                  style={styles.submit}>
-                  Login
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => Actions.push('forgetPassword')}>
-                <Text
-                  style={{
-                    textAlign: 'center',
-                    color: 'blue',
-                    margin: wp('4%') > hp('4%') ? wp('4%') : hp('4%'),
-                    fontSize: wp('3%') > hp('3%') ? wp('3%') : hp('3%'),
-                  }}>
-                  forgot password?
-                </Text>
-              </TouchableOpacity>
-            </View>
-            <View style={styles.covidView}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  marginBottom: 10,
-                }}>
-                <Text
-                  style={{
-                    fontSize: hp('2.5%') > wp('2.5%') ? hp('2.5%') : wp('2.5%'),
-                  }}>
-                  Don't have an account yet?
-                </Text>
-                <TouchableOpacity onPress={() => goToSignup()}>
-                  <Text style={styles.link}>Sign Up</Text>
-                </TouchableOpacity>
-              </View>
-              <Text style={styles.covid}>Covid-19: Stay Home, Stay Safe</Text>
-            </View>
+        <View style={styles.container}>
+          <View style={{alignItems: 'center'}}>
+            <Image source={dev} style={styles.img} />
+            <Text style={styles.tagLine}>
+              "working from home?? order chai and sutta online..."
+            </Text>
           </View>
-        </ScrollView>
+          <View>
+            <TextInput
+              keyboardType={'phone-pad'}
+              style={styles.card}
+              placeholder={'phone'}
+              onChangeText={handleChange('phone')}
+              value={values.phone}
+              returnKeyType={'next'}
+              placeholderTextColor={'#6961ff'}
+              onSubmitEditing={() => focusIt(passwordRef)}
+              onTextInput={() => setIsPhoneCorrect('')}
+            />
+            {!isPhoneCorrect ? (
+              <Text style={styles.error}>{touched.phone && errors.phone}</Text>
+            ) : (
+              <Text style={styles.error}>{isPhoneCorrect}</Text>
+            )}
+            <TextInput
+              ref={passwordRef}
+              style={styles.card}
+              placeholder={'password'}
+              onChangeText={handleChange('password')}
+              value={values.password}
+              secureTextEntry={true}
+              placeholderTextColor={'#6961ff'}
+            />
+
+            {!isPasswordCorrect ? (
+              <Text style={styles.error}>
+                {touched.password && errors.password}
+              </Text>
+            ) : (
+              <Text style={styles.error}>{isPasswordCorrect}</Text>
+            )}
+            <TouchableOpacity
+              style={[styles.card, styles.button]}
+              onPress={handleSubmit}>
+              <Text style={styles.submit}>Login</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => Actions.push('forgetPassword')}>
+              <Text
+                style={{
+                  textAlign: 'center',
+                  color: 'blue',
+                  margin: wp('4%') > hp('4%') ? wp('4%') : hp('4%'),
+                  fontSize: wp('3%') > hp('3%') ? wp('3%') : hp('3%'),
+                }}>
+                forgot password?
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.covidView}>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginBottom: 10,
+              }}>
+              <Text
+                style={{
+                  fontSize: hp('2.5%') > wp('2.5%') ? hp('2.5%') : wp('2.5%'),
+                }}>
+                Don't have an account yet?
+              </Text>
+              <TouchableOpacity onPress={() => goToSignup()}>
+                <Text style={styles.link}>Sign Up</Text>
+              </TouchableOpacity>
+            </View>
+            <Text style={styles.covid}>Covid-19: Stay Home, Stay Safe</Text>
+          </View>
+        </View>
       )}
     </Formik>
   );
