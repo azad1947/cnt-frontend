@@ -1,5 +1,6 @@
-import React from 'react';
+import React,{useEffect} from 'react';
 import {
+  ScrollView,
   View,
   Image,
   Text,
@@ -31,7 +32,7 @@ function UpdatePasswd({user_data, dispatch}) {
           console.log('matched');
           console.log('user_data--->', user_data);
           axios({
-            url: 'http://192.168.0.112:3000/updatepassword',
+            url: `${localhost}/updatepassword`,
             data: {
               phone: user_data.phone,
               password: values.password,
@@ -116,14 +117,12 @@ const styles = StyleSheet.create({
     width: 250,
     height: 36,
     borderRadius: 100 / 2,
-    // backgroundColor: 'skyblue',
     borderWidth: 1,
     borderColor: '#6961ff',
     color: '#6961ff',
     padding: 10,
     fontWeight: 'bold',
     margin: 5,
-    // color: 'brown',
   },
   imgView: {
     flex: 1,
@@ -144,13 +143,11 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     textAlignVertical: 'center',
     fontWeight: 'bold',
-    // color: '#6961ff',
     color: 'white',
     fontSize: 20,
   },
   inputView: {
     flex: 1,
-    // alignItems: 'center',
     marginTop: 50,
   },
   tagLine: {
@@ -160,7 +157,6 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: '#6961ff',
     marginBottom: 10,
-    // fontFamily: 'sans-serif-light',
     fontFamily: 'Merriweather-BlackItalic',
     fontWeight: 'bold',
     fontStyle: 'italic',

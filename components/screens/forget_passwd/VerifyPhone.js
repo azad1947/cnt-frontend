@@ -17,7 +17,7 @@ import ActionCreator from '../../../redux/ActionCreator';
 import {FORGET_PASSWD} from '../../../redux/actions';
 import {connect} from 'react-redux';
 import {Actions} from 'react-native-router-flux';
-import Store from '../../../redux/Store';
+import {localhost} from '../../../utils/cntUtis';
 import {styles} from '../../../utils/globalStyleSheet';
 import {
   widthPercentageToDP as wp,
@@ -46,7 +46,7 @@ function VerifyPhone({dispatch}) {
       onSubmit={(values) => {
         const {phone} = values;
         axios
-          .post('http://192.168.0.112:3000/resendcode', values)
+          .post(`${localhost}/resendcode`, values)
           .then((res) => {
             console.log('res.data---->', res.data);
             if (res.data === 'no account with this phone') {
@@ -57,9 +57,8 @@ function VerifyPhone({dispatch}) {
           })
           .catch((err) => console.log('err---->', err));
       }}>
-      {({handleChange, handleSubmit, errors, values, touched}) => {
-        const view = [
-          <View style={[styles.container]}>
+      {({handleChange, handleSubmit, errors, values, touched}) => (
+        <View style={[styles.container]}>
             <View style={{alignItems: 'center'}}>
               <Image source={forgetPassword} style={styles.img} />
               <Text style={styles.tagLine}>
@@ -92,17 +91,8 @@ function VerifyPhone({dispatch}) {
             <View style={styles.covidView}>
               <Text style={styles.covid}>Covid-19: Stay Home, Stay Safe</Text>
             </View>
-          </View>,
-        ];
-
-        return view.map((x) =>
-          screenHeight > screenWidth ? (
-            x
-          ) : (
-            <ScrollView key={'a'}>{x}</ScrollView>
-          ),
-        );
-      }}
+          </View>
+      )}
     </Formik>
   );
 }
