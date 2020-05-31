@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useRef} from 'react';
 import {
   View,
   Text,
@@ -17,6 +17,7 @@ import ActionCreator from '../../../redux/ActionCreator';
 import {SIGN_UP} from '../../../redux/actions';
 import axios from 'axios';
 import {styles} from '../../../utils/globalStyleSheet';
+import {focusIt, localhost} from '../../../utils/cntUtis';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
@@ -24,6 +25,8 @@ import {
 
 function Signup({dispatch}) {
   const [isPhoneExist, setIsPhoneExist] = useState(false);
+  const phoneRef = useRef(null);
+  const passwordRef = useRef(null);
   const validateSchema = Yup.object({
     name: Yup.string().required('required'),
     phone: Yup.string()
@@ -43,7 +46,7 @@ function Signup({dispatch}) {
       onSubmit={(values) => {
         dispatch(ActionCreator(SIGN_UP, values));
         axios
-          .post('http://192.168.0.112:3000/signup', values)
+          .post(`${localhost}/signup`, values)
           .then((res) => res.status)
           .then((code) => {
             console.log('code--->', code);
@@ -57,85 +60,81 @@ function Signup({dispatch}) {
           });
       }}>
       {({handleChange, handleSubmit, values, errors, touched}) => (
-        <ScrollView>
-          <View style={styles.container}>
-            <View style={{alignItems: 'center'}}>
-              <Image source={dev} style={styles.img} />
-              <Text style={styles.tagLine}>
-                hey, good to see you here. welcome to CNT
-              </Text>
-            </View>
+        <View style={styles.container}>
+          <View style={{alignItems: 'center'}}>
+            <Image source={dev} style={styles.img} />
+            <Text style={styles.tagLine}>
+              hey, good to see you here. welcome to CNT
+            </Text>
+          </View>
 
-            <View>
-              <TextInput
-                autoFocus={true}
-                placeholder={'name'}
-                placeholderTextColor={'#6961ff'}
-                onChangeText={handleChange('name')}
-                value={values.name}
-                style={styles.card}
-                returnKeyType={'next'}
-                onSubmitEditing={() => this.phoneInput.focus()}
-              />
-              <Text style={styles.error}>{errors.name}</Text>
-              <TextInput
-                keyboardType={'phone-pad'}
-                onChangeText={handleChange('phone')}
-                value={values.phone}
-                placeholder={'phone'}
-                placeholderTextColor={'#6961ff'}
-                style={styles.card}
-                returnKeyType={'next'}
-                ref={(input) => (this.phoneInput = input)}
-                onSubmitEditing={() => this.passwordInput.focus()}
-              />
-              {!isPhoneExist ? (
-                <Text style={styles.error}>
-                  {touched.phone && errors.phone}
-                </Text>
-              ) : (
-                <Text style={styles.error}>{'phone already exists'}</Text>
-              )}
-              <TextInput
-                onChangeText={handleChange('password')}
-                value={values.password}
-                placeholder={'password'}
-                placeholderTextColor={'#6961ff'}
-                secureTextEntry={true}
-                style={styles.card}
-                ref={(input) => (this.passwordInput = input)}
-              />
-              <Text style={styles.error}>
-                {touched.password && errors.password}
+          <View>
+            <TextInput
+              placeholder={'name'}
+              placeholderTextColor={'#6961ff'}
+              onChangeText={handleChange('name')}
+              value={values.name}
+              style={styles.card}
+              returnKeyType={'next'}
+              onSubmitEditing={() => focusIt(phoneRef)}
+            />
+            <Text style={styles.error}>{errors.name}</Text>
+            <TextInput
+              keyboardType={'phone-pad'}
+              onChangeText={handleChange('phone')}
+              value={values.phone}
+              placeholder={'phone'}
+              placeholderTextColor={'#6961ff'}
+              style={styles.card}
+              returnKeyType={'next'}
+              ref={phoneRef}
+              onSubmitEditing={() => focusIt(passwordRef)}
+              onTextInput={() => setIsPhoneExist(false)}
+            />
+            {!isPhoneExist ? (
+              <Text style={styles.error}>{touched.phone && errors.phone}</Text>
+            ) : (
+              <Text style={styles.error}>{'phone already exists'}</Text>
+            )}
+            <TextInput
+              onChangeText={handleChange('password')}
+              value={values.password}
+              placeholder={'password'}
+              placeholderTextColor={'#6961ff'}
+              secureTextEntry={true}
+              style={styles.card}
+              ref={passwordRef}
+            />
+            <Text style={styles.error}>
+              {touched.password && errors.password}
+            </Text>
+            <TouchableOpacity
+              style={[styles.card, styles.button]}
+              onPress={handleSubmit}>
+              <Text style={styles.submit}>Submit</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.covidView}>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginBottom: 10,
+              }}>
+              <Text
+                style={{
+                  fontSize: hp('2.5%') > wp('2.5%') ? hp('2.5%') : wp('2.5%'),
+                }}>
+                already have an account?
               </Text>
-              <TouchableOpacity
-                style={[styles.card, styles.button]}
-                onPress={handleSubmit}>
-                <Text style={styles.submit}>Submit</Text>
+              <TouchableOpacity onPress={() => back()}>
+                <Text style={styles.link}>Sign In</Text>
               </TouchableOpacity>
             </View>
-            <View style={styles.covidView}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  marginBottom: 10,
-                }}>
-                <Text
-                  style={{
-                    fontSize: hp('2.5%') > wp('2.5%') ? hp('2.5%') : wp('2.5%'),
-                  }}>
-                  already have an account?
-                </Text>
-                <TouchableOpacity onPress={() => back()}>
-                  <Text style={styles.link}>Sign In</Text>
-                </TouchableOpacity>
-              </View>
-              <Text style={styles.covid}>Covid-19: Stay Home, Stay Safe</Text>
-            </View>
+            <Text style={styles.covid}>Covid-19: Stay Home, Stay Safe</Text>
           </View>
-        </ScrollView>
+        </View>
       )}
     </Formik>
   );
