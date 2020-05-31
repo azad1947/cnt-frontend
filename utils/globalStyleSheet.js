@@ -12,7 +12,7 @@ export const styles = StyleSheet.create({
   },
   img: {
     width: wp('100%'),
-    height: hp('50%'),
+    height: hp('30%'),
     resizeMode: 'contain',
   },
   card: {
@@ -22,6 +22,7 @@ export const styles = StyleSheet.create({
     color: '#6961ff',
     borderColor: 'magenta',
     borderWidth: 1,
+    fontSize: wp('3%') > hp('3%') ? wp('3%') : hp('3%'),
     padding: wp('1%') > hp('1%') ? wp('1%') : hp('1%'),
     marginTop: wp('2%') > hp('2%') ? wp('2%') : hp('2%'),
     paddingLeft: wp('2%') > hp('2%') ? wp('2%') : hp('2%'),
@@ -32,7 +33,7 @@ export const styles = StyleSheet.create({
     marginLeft: 5,
   },
   covid: {
-    height: wp('8%') > hp('8%') ? wp('8%') : hp('8%'),
+    height: wp('5%') > hp('5%') ? wp('5%') : hp('5%'),
     textAlignVertical: 'center',
     textAlign: 'center',
     fontWeight: 'bold',
@@ -69,6 +70,6 @@ export const styles = StyleSheet.create({
   },
   covidView: {
     width: '100%',
-    marginTop: hp('5%')>wp('5%')?hp('5%'):wp('5%'),
+    // marginTop: hp('3%')>wp('3%')?hp('3%'):wp('3%'),
   },
 });
