@@ -52,7 +52,7 @@ export const styles = StyleSheet.create({
     color: '#6961ff',
     fontFamily: 'Merriweather-BlackItalic',
     fontWeight: 'bold',
-    fontStyle: 'italic',
+    // fontStyle: 'italic',
   },
   button: {
     width: wp('30%') > hp('30%') ? wp('30%') : hp('30%'),
