@@ -6,3 +6,4 @@ export const authentication = require('../assest/undraw_authentication_fsn5.png'
 export const twoFactor = require('../assest/undraw_two_factor_authentication_namy.png');
 export const forgetPassword = require('../assest/undraw_forgot_password_gi2d.png');
 export const updatePasswd = require('../assest/undraw_mobile_login_ikmv.png');
+export const socialDistancing = require('../assest/undraw_social_distancing_2g0u.png');
